@@ -27,10 +27,20 @@ public abstract class EquationSolver {
         return y;
     }
 
-    public static Vector LUDecomposition() {
-        return null;
+    public static SquareMatrix LUDecomposition(SquareMatrix A) {
+        SquareMatrix resultMatrix = new SquareMatrix(A);
+        for(int i = 0; i < A.getNumberOfRows()-1; i++){
+            for(int j = i + 1; j < A.getNumberOfRows(); j++){
+                A.setElementAt(j, i, A.getElementAt(j, i) / A.getElementAt(i, i));
+                for(int k = i + 1; k < A.getNumberOfRows(); k++){
+                    A.setElementAt(j, k, A.getElementAt(j, k) - A.getElementAt(j, i) * A.getElementAt(i, k));
+                }
+            }
+        }
+        return resultMatrix;
     }
 
+    //todo
     public static Vector LUPDecomposition() {
         return null;
     }
