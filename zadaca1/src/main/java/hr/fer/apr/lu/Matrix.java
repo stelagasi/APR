@@ -6,10 +6,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Objects;
 
-//todo metoda za mijenjanje dimenzije matrice?
 public class Matrix {
     private int numberOfRows, numberOfColumns;
     private double[] elements;
+
+    public Matrix() {
+    }
 
     public Matrix(Matrix matrix) {
         this(matrix.getNumberOfRows(), matrix.getNumberOfColumns(), matrix.getElements());
@@ -84,13 +86,13 @@ public class Matrix {
         return new Matrix(m1.getNumberOfRows(), m2.getNumberOfColumns(), resultElements);
     }
 
-    public Matrix selfAddition(Matrix m){
+    public Matrix selfAddition(Matrix m) {
         Matrix result = Matrix.addition(this, m);
         this.setElements(result.getElements());
         return this;
     }
 
-    public Matrix selfSubtraction(Matrix m){
+    public Matrix selfSubtraction(Matrix m) {
         Matrix result = Matrix.subtraction(this, m);
         this.setElements(result.getElements());
         return this;
@@ -112,8 +114,16 @@ public class Matrix {
         return elements;
     }
 
-    private void setElements(double[] elements) {
+    protected void setElements(double[] elements) {
         this.elements = elements;
+    }
+
+    protected void setNumberOfRows(int numberOfRows){
+        this.numberOfRows = numberOfRows;
+    }
+
+    protected void setNumberOfColumns(int numberOfColumns){
+        this.numberOfColumns = numberOfColumns;
     }
 
     public void setElementAt(int numberOfRow, int numberOfColumn, double value) {
@@ -126,7 +136,6 @@ public class Matrix {
         return elements[numberOfRow * numberOfColumns + numberOfColumn];
     }
 
-    //todo što s točkama kad je cijeli br?
     public void writeInFile(String file) {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
