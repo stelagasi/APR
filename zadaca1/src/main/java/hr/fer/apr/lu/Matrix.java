@@ -8,8 +8,8 @@ import java.util.Objects;
 
 //todo metoda za mijenjanje dimenzije matrice?
 public class Matrix {
-    int numberOfRows, numberOfColumns;
-    double[] elements;
+    private int numberOfRows, numberOfColumns;
+    private double[] elements;
 
     public Matrix(Matrix matrix) {
         this(matrix.getNumberOfRows(), matrix.getNumberOfColumns(), matrix.getElements());
@@ -44,37 +44,59 @@ public class Matrix {
         if (numberOfColumns <= 0 || numberOfRows <= 0) throw new IllegalArgumentException();
         this.numberOfRows = numberOfRows;
         this.numberOfColumns = numberOfColumns;
-        this.elements = Arrays.copyOf(elements, numberOfRows*numberOfColumns);
+        this.elements = Arrays.copyOf(elements, numberOfRows * numberOfColumns);
     }
 
-    public static Matrix addition(Matrix m1, Matrix m2){
-        if(m1.getNumberOfRows() != m2.getNumberOfRows() || m1.getNumberOfColumns() != m2.getNumberOfColumns())
+    public static Matrix addition(Matrix m1, Matrix m2) {
+        if (m1.getNumberOfRows() != m2.getNumberOfRows() || m1.getNumberOfColumns() != m2.getNumberOfColumns())
             throw new MatrixException("Matrices are not the same size.");
-        double[] resultElements;
-        return null;
+        double[] resultElements = new double[m1.getNumberOfRows() * m1.getNumberOfColumns()];
+        for (int i = 0; i < m1.getNumberOfRows(); i++) {
+            for (int j = 0; j < m1.getNumberOfColumns(); j++) {
+                resultElements[i * m1.getNumberOfColumns() + j] = m1.getElementAt(i, j) + m2.getElementAt(i, j);
+            }
+        }
+        return new Matrix(m1.getNumberOfRows(), m1.getNumberOfColumns(), resultElements);
     }
 
-    public static Matrix subtraction(Matrix m1, Matrix m2){
-        if(m1.getNumberOfRows() != m2.getNumberOfRows() || m1.getNumberOfColumns() != m2.getNumberOfColumns())
+    public static Matrix subtraction(Matrix m1, Matrix m2) {
+        if (m1.getNumberOfRows() != m2.getNumberOfRows() || m1.getNumberOfColumns() != m2.getNumberOfColumns())
             throw new MatrixException("Matrices are not the same size.");
-        double[] resultElements;
-        return null;//new Matrix(m1.numberOfColumns, m1.numberOfRows, resultElements);
+        double[] resultElements = new double[m1.getNumberOfRows() * m1.getNumberOfColumns()];
+        for (int i = 0; i < m1.getNumberOfRows(); i++) {
+            for (int j = 0; j < m1.getNumberOfColumns(); j++) {
+                resultElements[i * m1.getNumberOfColumns() + j] = m1.getElementAt(i, j) - m2.getElementAt(i, j);
+            }
+        }
+        return new Matrix(m1.getNumberOfRows(), m1.getNumberOfColumns(), resultElements);
     }
 
-    public static Matrix matrixMultiplication(Matrix m1, Matrix m2){
-        if(m1.getNumberOfColumns() != m2.getNumberOfRows()) throw new MatrixException("Matrices can't be multiplied.");
-        double[] resultElements = new double[m1.getNumberOfRows()*m2.getNumberOfColumns()];
-        for(int i = 0; i < m1.getNumberOfRows(); i++){
-            for(int j = 0; j < m2.getNumberOfColumns(); j++){
-                for(int k = 0; k < m2.getNumberOfRows(); k++){
-                    resultElements[i*m2.getNumberOfColumns()+j] += m1.getElementAt(i, k) * m2.getElementAt(k, j);
+    public static Matrix matrixMultiplication(Matrix m1, Matrix m2) {
+        if (m1.getNumberOfColumns() != m2.getNumberOfRows()) throw new MatrixException("Matrices can't be multiplied.");
+        double[] resultElements = new double[m1.getNumberOfRows() * m2.getNumberOfColumns()];
+        for (int i = 0; i < m1.getNumberOfRows(); i++) {
+            for (int j = 0; j < m2.getNumberOfColumns(); j++) {
+                for (int k = 0; k < m2.getNumberOfRows(); k++) {
+                    resultElements[i * m2.getNumberOfColumns() + j] += m1.getElementAt(i, k) * m2.getElementAt(k, j);
                 }
             }
         }
         return new Matrix(m1.getNumberOfRows(), m2.getNumberOfColumns(), resultElements);
     }
 
-    public Matrix multiplicationWithScalar(double scalar){
+    public Matrix selfAddition(Matrix m){
+        Matrix result = Matrix.addition(this, m);
+        this.setElements(result.getElements());
+        return this;
+    }
+
+    public Matrix selfSubtraction(Matrix m){
+        Matrix result = Matrix.subtraction(this, m);
+        this.setElements(result.getElements());
+        return this;
+    }
+
+    public Matrix multiplicationWithScalar(double scalar) {
         return new Matrix(this.numberOfRows, this.numberOfColumns, Arrays.stream(this.elements).map(i -> scalar * i).toArray());
     }
 
@@ -90,7 +112,10 @@ public class Matrix {
         return elements;
     }
 
-    //todo što ako želim veću matricu?
+    private void setElements(double[] elements) {
+        this.elements = elements;
+    }
+
     public void setElementAt(int numberOfRow, int numberOfColumn, double value) {
         if (numberOfRow >= numberOfRows || numberOfColumn >= numberOfColumns) throw new IllegalArgumentException();
         elements[numberOfRow * numberOfColumns + numberOfColumn] = value;
@@ -120,9 +145,9 @@ public class Matrix {
 
     public Matrix transpose() {
         double[] transposeElements = new double[this.elements.length];
-        for(int i = 0; i < numberOfRows; i++){
-            for(int j = 0; j < numberOfColumns; j++){
-                transposeElements[i*numberOfColumns+j] = this.elements[j*numberOfRows + i];
+        for (int i = 0; i < numberOfRows; i++) {
+            for (int j = 0; j < numberOfColumns; j++) {
+                transposeElements[i * numberOfColumns + j] = this.elements[j * numberOfRows + i];
             }
         }
         return new Matrix(this.numberOfColumns, this.numberOfRows, transposeElements);
@@ -158,5 +183,4 @@ public class Matrix {
         result = 31 * result + Arrays.hashCode(elements);
         return result;
     }
-
 }
