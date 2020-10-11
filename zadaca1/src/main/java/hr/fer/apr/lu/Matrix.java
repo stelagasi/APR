@@ -65,16 +65,13 @@ public class Matrix {
         if(m1.getNumberOfColumns() != m2.getNumberOfRows()) throw new MatrixException("Matrices can't be multiplied.");
         double[] resultElements = new double[m1.getNumberOfRows()*m2.getNumberOfColumns()];
         for(int i = 0; i < m1.getNumberOfRows(); i++){
-            double value = 0;
-            for(int j = 0; j < m1.getNumberOfColumns(); j++){
-                for(int k = 0; j < m2.getNumberOfColumns(); j++){
-                    for(int l = 0; l < m2.getNumberOfRows(); l++){
-                        value += m1.getElementAt(i, j) * m2.getElementAt(l, j);
-                    }
+            for(int j = 0; j < m2.getNumberOfColumns(); j++){
+                for(int k = 0; k < m2.getNumberOfRows(); k++){
+                    resultElements[i*m2.getNumberOfColumns()+j] += m1.getElementAt(i, k) * m2.getElementAt(k, j);
                 }
             }
         }
-        return null;
+        return new Matrix(m1.getNumberOfRows(), m2.getNumberOfColumns(), resultElements);
     }
 
     public Matrix multiplicationWithScalar(double scalar){
