@@ -1,22 +1,21 @@
-package hr.fer.apr.lu;
+package hr.fer.apr.lu.matrix;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
-public class Vector extends Matrix {
-
-    public Vector(int numberOfRows, double[] elements) {
-        super(numberOfRows, 1, elements);
+public class SquareMatrix extends Matrix {
+    public SquareMatrix(Matrix matrix) {
+        if(matrix.getNumberOfRows() != matrix.getNumberOfColumns()) throw new IllegalArgumentException();
+        this.setNumberOfRows(matrix.getNumberOfRows());
+        this.setNumberOfColumns(matrix.getNumberOfColumns());
+        this.setElements(Arrays.copyOf(matrix.getElements(), matrix.getNumberOfRows()*matrix.getNumberOfRows()));
     }
 
-    public Vector(Vector vector) {
-        super(vector);
-    }
-
-    public Vector(String file) {
+    public SquareMatrix(String file) {
         int numberOfColumns = -1;
         int numberOfRows = 0;
         ArrayList<String> strings = new ArrayList<>();
@@ -25,26 +24,24 @@ public class Vector extends Matrix {
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 if (numberOfColumns == -1) numberOfColumns = line.split("\\s+").length;
-                else if (numberOfColumns != 1) throw new IllegalArgumentException();
+                else if (numberOfColumns != line.split("\\s+").length) throw new IllegalArgumentException();
                 numberOfRows++;
                 Collections.addAll(strings, line.split("\\s+"));
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        if(numberOfColumns != numberOfRows) throw new IllegalArgumentException();
         double[] elements = new double[strings.size()];
         for (int i = 0; i < strings.size(); i++) {
             elements[i] = Double.parseDouble(strings.get(i));
         }
+        this.setNumberOfColumns(numberOfColumns);
         this.setNumberOfRows(numberOfRows);
         this.setElements(elements);
     }
 
-    public void setElementAt(int numberOfRow, double value) {
-        super.setElementAt(numberOfRow, 0, value);
-    }
-
-    public double getElementAt(int numberOfRow) {
-        return super.getElementAt(numberOfRow, 0);
+    public SquareMatrix(int dimension, double[] elements){
+        super(dimension, dimension, elements);
     }
 }

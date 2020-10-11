@@ -1,4 +1,6 @@
-package hr.fer.apr.lu;
+package hr.fer.apr.lu.matrix;
+
+import hr.fer.apr.lu.MatrixException;
 
 import java.io.*;
 import java.util.ArrayList;
