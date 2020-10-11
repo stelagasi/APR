@@ -12,9 +12,7 @@ public class Matrix {
     double[] elements;
 
     public Matrix(Matrix matrix) {
-        this.numberOfRows = matrix.getNumberOfRows();
-        this.numberOfColumns = matrix.getNumberOfColumns();
-        this.elements = matrix.getElements();
+        this(matrix.getNumberOfRows(), matrix.getNumberOfColumns(), matrix.getElements());
     }
 
     public Matrix(String file) {
@@ -42,6 +40,47 @@ public class Matrix {
         this.elements = elements;
     }
 
+    public Matrix(int numberOfRows, int numberOfColumns, double[] elements) {
+        if (numberOfColumns <= 0 || numberOfRows <= 0) throw new IllegalArgumentException();
+        this.numberOfRows = numberOfRows;
+        this.numberOfColumns = numberOfColumns;
+        this.elements = Arrays.copyOf(elements, numberOfRows*numberOfColumns);
+    }
+
+    public static Matrix addition(Matrix m1, Matrix m2){
+        if(m1.getNumberOfRows() != m2.getNumberOfRows() || m1.getNumberOfColumns() != m2.getNumberOfColumns())
+            throw new MatrixException("Matrices are not the same size.");
+        double[] resultElements;
+        return null;
+    }
+
+    public static Matrix subtraction(Matrix m1, Matrix m2){
+        if(m1.getNumberOfRows() != m2.getNumberOfRows() || m1.getNumberOfColumns() != m2.getNumberOfColumns())
+            throw new MatrixException("Matrices are not the same size.");
+        double[] resultElements;
+        return null;//new Matrix(m1.numberOfColumns, m1.numberOfRows, resultElements);
+    }
+
+    public static Matrix matrixMultiplication(Matrix m1, Matrix m2){
+        if(m1.getNumberOfColumns() != m2.getNumberOfRows()) throw new MatrixException("Matrices can't be multiplied.");
+        double[] resultElements = new double[m1.getNumberOfRows()*m2.getNumberOfColumns()];
+        for(int i = 0; i < m1.getNumberOfRows(); i++){
+            double value = 0;
+            for(int j = 0; j < m1.getNumberOfColumns(); j++){
+                for(int k = 0; j < m2.getNumberOfColumns(); j++){
+                    for(int l = 0; l < m2.getNumberOfRows(); l++){
+                        value += m1.getElementAt(i, j) * m2.getElementAt(l, j);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public Matrix multiplicationWithScalar(double scalar){
+        return new Matrix(this.numberOfRows, this.numberOfColumns, Arrays.stream(this.elements).map(i -> scalar * i).toArray());
+    }
+
     public int getNumberOfRows() {
         return numberOfRows;
     }
@@ -54,11 +93,18 @@ public class Matrix {
         return elements;
     }
 
-    public void setElementTo(int numberOfRow, int numberOfColumn, double value) {
+    //todo što ako želim veću matricu?
+    public void setElementAt(int numberOfRow, int numberOfColumn, double value) {
         if (numberOfRow >= numberOfRows || numberOfColumn >= numberOfColumns) throw new IllegalArgumentException();
         elements[numberOfRow * numberOfColumns + numberOfColumn] = value;
     }
 
+    public double getElementAt(int numberOfRow, int numberOfColumn) {
+        if (numberOfRow >= numberOfRows || numberOfColumn >= numberOfColumns) throw new IllegalArgumentException();
+        return elements[numberOfRow * numberOfColumns + numberOfColumn];
+    }
+
+    //todo što s točkama kad je cijeli br?
     public void writeInFile(String file) {
         try {
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
@@ -75,6 +121,16 @@ public class Matrix {
         }
     }
 
+    public Matrix transpose() {
+        double[] transposeElements = new double[this.elements.length];
+        for(int i = 0; i < numberOfRows; i++){
+            for(int j = 0; j < numberOfColumns; j++){
+                transposeElements[i*numberOfColumns+j] = this.elements[j*numberOfRows + i];
+            }
+        }
+        return new Matrix(this.numberOfColumns, this.numberOfRows, transposeElements);
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[");
@@ -85,7 +141,7 @@ public class Matrix {
             }
             stringBuilder.append(elements[i * numberOfColumns + numberOfColumns - 1]).append("]\n");
         }
-        stringBuilder.deleteCharAt(stringBuilder.lastIndexOf("\n")).append("]");
+        stringBuilder.deleteCharAt(stringBuilder.lastIndexOf("\n")).append("]\n");
         return stringBuilder.toString();
     }
 
@@ -105,4 +161,5 @@ public class Matrix {
         result = 31 * result + Arrays.hashCode(elements);
         return result;
     }
+
 }
