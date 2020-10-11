@@ -2,7 +2,9 @@ package hr.fer.apr.lu;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.Objects;
 
 //todo metoda za mijenjanje dimenzije matrice?
 public class Matrix {
@@ -57,6 +59,22 @@ public class Matrix {
         elements[numberOfRow * numberOfColumns + numberOfColumn] = value;
     }
 
+    public void writeInFile(String file) {
+        try {
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file)));
+            for (int i = 0; i < numberOfRows; i++) {
+                for (int j = 0; j < numberOfColumns; j++) {
+                    bufferedWriter.write(String.valueOf(elements[i * numberOfColumns + j]));
+                    if (j != numberOfColumns - 1) bufferedWriter.write(" ");
+                }
+                if (i != numberOfRows - 1) bufferedWriter.newLine();
+            }
+            bufferedWriter.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder("[");
@@ -69,5 +87,22 @@ public class Matrix {
         }
         stringBuilder.deleteCharAt(stringBuilder.lastIndexOf("\n")).append("]");
         return stringBuilder.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Matrix matrix = (Matrix) o;
+        return numberOfRows == matrix.numberOfRows &&
+                numberOfColumns == matrix.numberOfColumns &&
+                Arrays.equals(elements, matrix.elements);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(numberOfRows, numberOfColumns);
+        result = 31 * result + Arrays.hashCode(elements);
+        return result;
     }
 }
