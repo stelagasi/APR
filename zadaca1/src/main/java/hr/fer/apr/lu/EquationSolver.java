@@ -32,11 +32,12 @@ public class EquationSolver {
         return y;
     }
 
-    //todo dijeljenje s nulom
+    //todo jel hocu resultMatrix ili samo A
     public static SquareMatrix LUDecomposition(SquareMatrix A) {
         SquareMatrix resultMatrix = new SquareMatrix(A);
         for (int i = 0; i < A.getNumberOfRows() - 1; i++) {
             for (int j = i + 1; j < A.getNumberOfRows(); j++) {
+                if(Math.abs(A.getElementAt(i, i)) < 1e-6) throw new ArithmeticException("Division by zero.");
                 A.setElementAt(j, i, A.getElementAt(j, i) / A.getElementAt(i, i));
                 for (int k = i + 1; k < A.getNumberOfRows(); k++) {
                     A.setElementAt(j, k, A.getElementAt(j, k) - A.getElementAt(j, i) * A.getElementAt(i, k));
@@ -46,7 +47,6 @@ public class EquationSolver {
         return resultMatrix;
     }
 
-    //todo dijeljenje s nulom PAZIII
     public static SquareMatrix LUPDecomposition(SquareMatrix A) {
         for (int i = 0; i < A.getNumberOfRows() - 1; i++) {
             int pivot = i;
@@ -55,6 +55,7 @@ public class EquationSolver {
             }
             A.swapRows(i, pivot);
             for(int j = i+1; j < A.getNumberOfRows(); j++){
+                if(Math.abs(A.getElementAt(i, i)) < 1e-6) throw new ArithmeticException("Division by zero.");
                 A.setElementAt(j, i, A.getElementAt(j, i) / A.getElementAt(i, i));
                 for(int k = i+1; k < A.getNumberOfRows(); k++){
                     A.setElementAt(j, k, A.getElementAt(j, k) - A.getElementAt(j, i) * A.getElementAt(i, k));
