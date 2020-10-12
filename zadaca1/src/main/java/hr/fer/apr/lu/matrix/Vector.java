@@ -37,6 +37,7 @@ public class Vector extends Matrix {
             elements[i] = Double.parseDouble(strings.get(i));
         }
         this.setNumberOfRows(numberOfRows);
+        this.setNumberOfColumns(1);
         this.setElements(elements);
     }
 
