@@ -88,6 +88,18 @@ public class Matrix {
         return new Matrix(m1.getNumberOfRows(), m2.getNumberOfColumns(), resultElements);
     }
 
+    public Matrix swapRows(int first, int second){
+        if(first >= getNumberOfRows() || first < 0 || second >= getNumberOfRows() || second < 0)
+            throw new IllegalArgumentException();
+        double[] copyRow = new double[getNumberOfRows()];
+        for(int i = 0; i < getNumberOfRows(); i++){
+            copyRow[i] = getElementAt(i, first);
+            setElementAt(i, first, getElementAt(i, second));
+            setElementAt(i, second, copyRow[i]);
+        }
+        return this;
+    }
+
     public Matrix selfAddition(Matrix m) {
         Matrix result = Matrix.addition(this, m);
         this.setElements(result.getElements());
