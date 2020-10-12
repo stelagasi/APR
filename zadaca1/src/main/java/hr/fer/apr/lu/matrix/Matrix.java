@@ -91,11 +91,11 @@ public class Matrix {
     public Matrix swapRows(int first, int second){
         if(first >= getNumberOfRows() || first < 0 || second >= getNumberOfRows() || second < 0)
             throw new IllegalArgumentException();
-        double[] copyRow = new double[getNumberOfRows()];
-        for(int i = 0; i < getNumberOfRows(); i++){
-            copyRow[i] = getElementAt(i, first);
-            setElementAt(i, first, getElementAt(i, second));
-            setElementAt(i, second, copyRow[i]);
+        double[] copyRow = new double[getNumberOfColumns()];
+        for(int i = 0; i < getNumberOfColumns(); i++){
+            copyRow[i] = getElementAt(first, i);
+            setElementAt(first, i, getElementAt(second, i));
+            setElementAt(second, i, copyRow[i]);
         }
         return this;
     }
