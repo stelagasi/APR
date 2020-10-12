@@ -44,4 +44,26 @@ public class SquareMatrix extends Matrix {
     public SquareMatrix(int dimension, double[] elements){
         super(dimension, dimension, elements);
     }
+
+    public SquareMatrix getL(){
+        SquareMatrix L = new SquareMatrix(this);
+        for(int i = 0; i < this.getNumberOfRows(); i++){
+            L.setElementAt(i, i, 1);
+            for(int j = i + 1; j < this.getNumberOfColumns(); j++){
+                L.setElementAt(i, j, 0);
+            }
+        }
+        return L;
+    }
+
+    public SquareMatrix getU(){
+        SquareMatrix U = new SquareMatrix(this);
+        for(int i = 0; i < this.getNumberOfRows(); i++){
+            for(int j = 0; j < i; j++){
+                U.setElementAt(i, j, 0);
+            }
+        }
+        return U;
+    }
+
 }
