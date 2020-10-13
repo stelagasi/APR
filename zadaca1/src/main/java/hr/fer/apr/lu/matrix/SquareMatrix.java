@@ -9,10 +9,10 @@ import java.util.Collections;
 
 public class SquareMatrix extends Matrix {
     public SquareMatrix(Matrix matrix) {
-        if(matrix.getNumberOfRows() != matrix.getNumberOfColumns()) throw new IllegalArgumentException();
+        if (matrix.getNumberOfRows() != matrix.getNumberOfColumns()) throw new IllegalArgumentException();
         this.setNumberOfRows(matrix.getNumberOfRows());
         this.setNumberOfColumns(matrix.getNumberOfColumns());
-        this.setElements(Arrays.copyOf(matrix.getElements(), matrix.getNumberOfRows()*matrix.getNumberOfRows()));
+        this.setElements(Arrays.copyOf(matrix.getElements(), matrix.getNumberOfRows() * matrix.getNumberOfRows()));
     }
 
     public SquareMatrix(String file) {
@@ -31,7 +31,7 @@ public class SquareMatrix extends Matrix {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if(numberOfColumns != numberOfRows) throw new IllegalArgumentException();
+        if (numberOfColumns != numberOfRows) throw new IllegalArgumentException();
         double[] elements = new double[strings.size()];
         for (int i = 0; i < strings.size(); i++) {
             elements[i] = Double.parseDouble(strings.get(i));
@@ -41,25 +41,25 @@ public class SquareMatrix extends Matrix {
         this.setElements(elements);
     }
 
-    public SquareMatrix(int dimension, double[] elements){
+    public SquareMatrix(int dimension, double[] elements) {
         super(dimension, dimension, elements);
     }
 
-    public SquareMatrix getL(){
+    public SquareMatrix getL() {
         SquareMatrix L = new SquareMatrix(this);
-        for(int i = 0; i < this.getNumberOfRows(); i++){
+        for (int i = 0; i < this.getNumberOfRows(); i++) {
             L.setElementAt(i, i, 1);
-            for(int j = i + 1; j < this.getNumberOfColumns(); j++){
+            for (int j = i + 1; j < this.getNumberOfColumns(); j++) {
                 L.setElementAt(i, j, 0);
             }
         }
         return L;
     }
 
-    public SquareMatrix getU(){
+    public SquareMatrix getU() {
         SquareMatrix U = new SquareMatrix(this);
-        for(int i = 0; i < this.getNumberOfRows(); i++){
-            for(int j = 0; j < i; j++){
+        for (int i = 0; i < this.getNumberOfRows(); i++) {
+            for (int j = 0; j < i; j++) {
                 U.setElementAt(i, j, 0);
             }
         }
