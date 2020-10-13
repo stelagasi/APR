@@ -88,11 +88,11 @@ public class Matrix {
         return new Matrix(m1.getNumberOfRows(), m2.getNumberOfColumns(), resultElements);
     }
 
-    public Matrix swapRows(int first, int second){
-        if(first >= getNumberOfRows() || first < 0 || second >= getNumberOfRows() || second < 0)
+    public Matrix swapRows(int first, int second) {
+        if (first >= getNumberOfRows() || first < 0 || second >= getNumberOfRows() || second < 0)
             throw new IllegalArgumentException();
         double[] copyRow = new double[getNumberOfColumns()];
-        for(int i = 0; i < getNumberOfColumns(); i++){
+        for (int i = 0; i < getNumberOfColumns(); i++) {
             copyRow[i] = getElementAt(first, i);
             setElementAt(first, i, getElementAt(second, i));
             setElementAt(second, i, copyRow[i]);
@@ -132,11 +132,11 @@ public class Matrix {
         this.elements = elements;
     }
 
-    protected void setNumberOfRows(int numberOfRows){
+    protected void setNumberOfRows(int numberOfRows) {
         this.numberOfRows = numberOfRows;
     }
 
-    protected void setNumberOfColumns(int numberOfColumns){
+    protected void setNumberOfColumns(int numberOfColumns) {
         this.numberOfColumns = numberOfColumns;
     }
 
