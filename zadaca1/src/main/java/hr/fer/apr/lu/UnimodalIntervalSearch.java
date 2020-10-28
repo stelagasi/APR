@@ -1,0 +1,63 @@
+package hr.fer.apr.lu;
+
+import hr.fer.apr.lu.matrix.Vector;
+
+import java.util.ArrayList;
+import java.util.function.Function;
+
+public class UnimodalIntervalSearch {
+
+    private UnimodalIntervalSearch(){}
+
+    public static ArrayList<Vector> of(Function<Vector, Double> goalFunction, double h, Vector point, int dimension){
+        double m = point.getElementAt(dimension);
+        double l = point.getElementAt(dimension) - h;
+        double r = point.getElementAt(dimension) + h;
+        int step = 1;
+
+        Vector a = new Vector(point);
+        a.setElementAt(dimension, l);
+        Vector b = new Vector(point);
+        b.setElementAt(dimension, r);
+
+        double fm = goalFunction.apply(point);
+        double fa = goalFunction.apply(a);
+        double fb = goalFunction.apply(b);
+
+        if(fm < fb && fm < fa) {
+            ArrayList<Vector> result = new ArrayList<>();
+            result.add(a);
+            result.add(b);
+            return result;
+        } else if(fm > fb) {
+            do {
+                a.setElementAt(dimension, m);
+                m = r;
+                fm = fb;
+                step *= 2;
+                r = point.getElementAt(dimension) + h * step;
+                b.setElementAt(dimension, r);
+                fb = goalFunction.apply(b);
+            } while(fm > fb);
+
+            ArrayList<Vector> result = new ArrayList<>();
+            result.add(a);
+            result.add(b);
+            return result;
+        } else {
+            do {
+                b.setElementAt(dimension, m);
+                m = l;
+                fm = fa;
+                step *= 2;
+                l = point.getElementAt(dimension) - h * step;
+                a.setElementAt(dimension, l);
+                fa = goalFunction.apply(a);
+            } while(fm > fa);
+            ArrayList<Vector> result = new ArrayList<>();
+            result.add(a);
+            result.add(b);
+            return result;
+        }
+    }
+}
