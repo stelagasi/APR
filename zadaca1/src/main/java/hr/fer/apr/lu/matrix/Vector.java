@@ -1,9 +1,12 @@
 package hr.fer.apr.lu.matrix;
 
+import hr.fer.apr.lu.MatrixException;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 
 public class Vector extends Matrix {
@@ -41,11 +44,36 @@ public class Vector extends Matrix {
         this.setElements(elements);
     }
 
+    public static Vector addition(Vector v1, Vector v2) {
+        if (v1.getNumberOfRows() != v2.getNumberOfRows())
+            throw new MatrixException("Vectors are not the same size.");
+        Vector result = new Vector(v1);
+        for (int i = 0; i < v1.getNumberOfRows(); i++) {
+            result.setElementAt(i, v1.getElementAt(i) + v2.getElementAt(i));
+        }
+        return result;
+    }
+
+    public static Vector subtraction(Vector v1, Vector v2) {
+        if (v1.getNumberOfRows() != v2.getNumberOfRows())
+            throw new MatrixException("Vectors are not the same size.");
+        Vector result = new Vector(v1);
+        for (int i = 0; i < v1.getNumberOfRows(); i++) {
+            result.setElementAt(i, v1.getElementAt(i) - v2.getElementAt(i));
+        }
+        return result;
+    }
+
+
     public void setElementAt(int numberOfRow, double value) {
         super.setElementAt(numberOfRow, 0, value);
     }
 
     public double getElementAt(int numberOfRow) {
         return super.getElementAt(numberOfRow, 0);
+    }
+
+    public Vector multiplicationWithScalar(double scalar) {
+        return new Vector(this.getNumberOfRows(), Arrays.stream(this.getElements()).map(i -> scalar * i).toArray());
     }
 }
