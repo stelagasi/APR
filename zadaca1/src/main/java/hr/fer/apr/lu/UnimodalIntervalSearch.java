@@ -24,8 +24,9 @@ public class UnimodalIntervalSearch {
         double fa = goalFunction.apply(a);
         double fb = goalFunction.apply(b);
 
+        ArrayList<Vector> result = new ArrayList<>();
+
         if(fm < fb && fm < fa) {
-            ArrayList<Vector> result = new ArrayList<>();
             result.add(a);
             result.add(b);
             return result;
@@ -39,8 +40,6 @@ public class UnimodalIntervalSearch {
                 b.setElementAt(dimension, r);
                 fb = goalFunction.apply(b);
             } while(fm > fb);
-
-            ArrayList<Vector> result = new ArrayList<>();
             result.add(a);
             result.add(b);
             return result;
@@ -54,7 +53,6 @@ public class UnimodalIntervalSearch {
                 a.setElementAt(dimension, l);
                 fa = goalFunction.apply(a);
             } while(fm > fa);
-            ArrayList<Vector> result = new ArrayList<>();
             result.add(a);
             result.add(b);
             return result;
