@@ -1,9 +1,7 @@
-package hr.fer.apr.lu;
+package hr.fer.apr.optimization;
 
 import hr.fer.apr.lu.matrix.Vector;
 import java.util.function.Function;
-
-import static java.lang.Math.abs;
 
 public class CoordinateAxisSearch {
 
@@ -23,7 +21,7 @@ public class CoordinateAxisSearch {
 
     private static boolean condition(Vector x, Vector xs, Vector e){
         for (int i = 0; i < x.getNumberOfRows(); i++) {
-            if(abs(x.getElementAt(i) - xs.getElementAt(i)) > e.getElementAt(i)){
+            if(Math.abs(x.getElementAt(i) - xs.getElementAt(i)) > e.getElementAt(i)){
                 return true;
             }
         }

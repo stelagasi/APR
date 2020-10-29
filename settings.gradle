@@ -1,3 +1,4 @@
 rootProject.name = 'APR'
 include 'zadaca1'
+include 'zadaca2'
 

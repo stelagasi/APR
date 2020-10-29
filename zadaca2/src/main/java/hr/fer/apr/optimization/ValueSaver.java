@@ -1,4 +1,4 @@
-package hr.fer.apr.lu;
+package hr.fer.apr.optimization;
 
 import hr.fer.apr.lu.matrix.Vector;
 
