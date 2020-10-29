@@ -21,7 +21,7 @@ public class HookeJeevesSearch {
                 Dx = Dx.multiplicationWithScalar((double) 1/2);
                 startingSearchPoint = new Vector(basePoint);
             }
-        } while(vectorComparison(Dx, epsilon.multiplicationWithScalar(0.5))>= 0);
+        } while(vectorComparison(Dx, epsilon.multiplicationWithScalar(0.5)) >= 0);
 
         return basePoint;
     }
