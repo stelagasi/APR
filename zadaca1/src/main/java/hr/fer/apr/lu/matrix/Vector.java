@@ -64,7 +64,6 @@ public class Vector extends Matrix {
         return result;
     }
 
-
     public void setElementAt(int numberOfRow, double value) {
         super.setElementAt(numberOfRow, 0, value);
     }
