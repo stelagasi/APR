@@ -43,9 +43,8 @@ public class GoldenSectionSearch {
         return result;
     }
 
-    //todo koliki h treba biti??
-    public static Vector of(Function<Vector, Double> function, int dimension, Vector startingPoint, Vector e){
-        ArrayList<Vector> unimodalInterval = UnimodalIntervalSearch.of(function, 10e-6, startingPoint, dimension);
+    public static Vector of(Function<Vector, Double> function, int dimension, Vector startingPoint, Vector e, double h){
+        ArrayList<Vector> unimodalInterval = UnimodalIntervalSearch.of(function, h, startingPoint, dimension);
         Vector a = unimodalInterval.get(0);
         Vector b = unimodalInterval.get(1);
 
