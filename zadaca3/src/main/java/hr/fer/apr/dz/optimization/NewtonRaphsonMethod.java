@@ -16,29 +16,28 @@ public class NewtonRaphsonMethod {
 
     public static Vector of(Function<Vector, Vector> gradient, Function<Vector, SquareMatrix> hesseMatrix, Vector startingPoint, double epsilon) {
         Vector nextPoint = startingPoint;
-        while (true) {
+        for (int i = 0; i < 10000; i++) {
             Vector point = nextPoint;
             SquareMatrix H = hesseMatrix.apply(point);
             Vector result = new Vector(Matrix.matrixMultiplication(inverseOfMatrix(H), gradient.apply(point)));
             if (result.getEuclideanNorm() < epsilon) return point;
             nextPoint = Vector.subtraction(point, result);
         }
+        return nextPoint;
     }
 
     public static Vector withGoldenSection(Function<Vector, Double> function, Function<Vector, Vector> gradient, Function<Vector, SquareMatrix> hesseMatrix, Vector startingPoint, double epsilon){
         Vector nextPoint = startingPoint;
 
-        while(true){
+        for (int i = 0; i < 10000; i++) {
             Vector point = nextPoint;
             SquareMatrix H = hesseMatrix.apply(point);
             Vector result = new Vector(Matrix.matrixMultiplication(inverseOfMatrix(H), gradient.apply(point)));
-            result = result.multiplicationWithScalar(-1);
 
             if(result.getEuclideanNorm() < epsilon) return nextPoint;
 
-            Function<Vector, Double> lambdaFunction = FunctionGenerator.getLambdaFunction(function, result, point);
-            Vector shift = GoldenSectionSearch.ofDirection(lambdaFunction, result, point, epsilon, 1);
-            nextPoint = Vector.addition(point, shift);
+            nextPoint = GoldenSectionSearch.ofDirection(function, result, point, epsilon, 1);
         }
+        return nextPoint;
     }
 }
