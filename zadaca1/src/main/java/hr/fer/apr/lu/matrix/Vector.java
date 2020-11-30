@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static java.lang.Math.pow;
+import static java.lang.Math.sqrt;
+
 public class Vector extends Matrix {
 
     public Vector(int numberOfRows, double[] elements) {
@@ -17,6 +20,11 @@ public class Vector extends Matrix {
 
     public Vector(Vector vector) {
         super(vector);
+    }
+
+    public Vector(Matrix matrix){
+        super(matrix.getNumberOfRows(), 1, matrix.getElements());
+        if(matrix.getNumberOfColumns() != 1) throw new IllegalArgumentException("Vector has one column.");
     }
 
     public Vector(String file) {
@@ -74,5 +82,15 @@ public class Vector extends Matrix {
 
     public Vector multiplicationWithScalar(double scalar) {
         return new Vector(this.getNumberOfRows(), Arrays.stream(this.getElements()).map(i -> scalar * i).toArray());
+    }
+
+    public double getEuclideanNorm() {
+        double euclideanNorm = 0.0;
+
+        for (int i = 0; i < getNumberOfRows(); i++) {
+            euclideanNorm += pow(getElementAt(i), 2);
+        }
+
+        return sqrt(euclideanNorm);
     }
 }
