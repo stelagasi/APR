@@ -40,17 +40,11 @@ public class BoxMethod {
             for (int j = 0; j < NUMBER_OF_VARIABLES; j++) {
                 point.setElementAt(j, random() * (2 * explicitRestriction) - explicitRestriction);
             }
-            boolean violating = true;
-            while (violating) {
-                violating = false;
-                for (ImplicitRestriction restriction : restrictions) {
-                    if (!restriction.getCondition().apply(point)) {
-                        point = Vector.addition(point, centroid.getPoint()).multiplicationWithScalar(1. / 2);
-                        violating = true;
-                        break;
-                    }
-                }
+
+            while (!checkImplicitRestrictions(point, restrictions)) {
+                point = Vector.addition(point, centroid.getPoint()).multiplicationWithScalar(1. / 2);
             }
+
             ValueSaver pointValue = new ValueSaver(point, function.apply(point));
             points.add(pointValue);
             centroid = calculateCentroid(function, points, findWorstPoint(points));
@@ -116,7 +110,7 @@ public class BoxMethod {
 
     private static boolean checkImplicitRestrictions(Vector point, List<ImplicitRestriction> restrictions) {
         for (ImplicitRestriction restriction : restrictions) {
-            if (!restriction.getCondition().apply(point)) {
+            if (restriction.getCondition().apply(point) < 0) {
                 return false;
             }
         }
