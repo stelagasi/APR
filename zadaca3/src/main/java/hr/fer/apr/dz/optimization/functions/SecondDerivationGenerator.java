@@ -13,8 +13,8 @@ public class SecondDerivationGenerator {
         return vector -> {
             double element1 = -400 * vector.getElementAt(1) + 1200 * pow(vector.getElementAt(0), 2) + 2;
             double element2 = -400 * vector.getElementAt(0);
-            double element3 = 200;
-            double element4 = -400 * vector.getElementAt(0);
+            double element3 = -400 * vector.getElementAt(0);
+            double element4 = 200;
             return new SquareMatrix(2, new double[]{element1, element2, element3, element4});
         };
     }
