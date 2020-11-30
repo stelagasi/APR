@@ -58,4 +58,47 @@ public class UnimodalIntervalSearch {
             return result;
         }
     }
+
+    public static ArrayList<Vector> ofDirection(Function<Vector, Double> goalFunction, double h, Vector point, Vector direction){
+        Vector normalizedDirection = direction.multiplicationWithScalar(1/direction.getEuclideanNorm());
+        Vector a = Vector.subtraction(point, normalizedDirection.multiplicationWithScalar(h));
+        Vector b = Vector.addition(point, normalizedDirection.multiplicationWithScalar(h));
+        int step = 1;
+
+        double fPoint = goalFunction.apply(point);
+        double fa = goalFunction.apply(a);
+        double fb = goalFunction.apply(b);
+
+        ArrayList<Vector> result = new ArrayList<>();
+
+        if(fPoint < fb && fPoint < fa) {
+            result.add(a);
+            result.add(b);
+            return result;
+        } else if(fPoint > fb) {
+            do {
+                a = point;
+                point = b;
+                fPoint = fb;
+                step *= 2;
+                b = Vector.addition(point, normalizedDirection.multiplicationWithScalar(h * step));
+                fb = goalFunction.apply(b);
+            } while(fPoint > fb);
+            result.add(a);
+            result.add(b);
+            return result;
+        } else {
+            do {
+                b = point;
+                point = a;
+                fPoint = fa;
+                step *= 2;
+                a = Vector.subtraction(point, normalizedDirection.multiplicationWithScalar(h * step));
+                fa = goalFunction.apply(a);
+            } while(fPoint > fa);
+            result.add(a);
+            result.add(b);
+            return result;
+        }
+    }
 }
