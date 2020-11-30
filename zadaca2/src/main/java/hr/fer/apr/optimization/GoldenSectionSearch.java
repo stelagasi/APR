@@ -68,16 +68,6 @@ public class GoldenSectionSearch {
         return Vector.addition(a, b).multiplicationWithScalar(1./2);
     }
 
-//    private static boolean compare(Vector v1, Vector v2){
-//        if(v1.getNumberOfRows() != v2.getNumberOfRows()) throw new IllegalArgumentException("Vectors are not the same size");
-//
-//        for(int i = 0; i < v1.getNumberOfRows(); i++){
-//            if(v2.getElementAt(i) >= v1.getElementAt(i)) return false;
-//        }
-//
-//        return true;
-//    }
-
     public static Vector of(Function<Vector, Double> function, int dimension, Vector startingPoint, Vector e, double h){
         ArrayList<Vector> unimodalInterval = UnimodalIntervalSearch.of(function, h, startingPoint, dimension);
         Vector a = unimodalInterval.get(0);
