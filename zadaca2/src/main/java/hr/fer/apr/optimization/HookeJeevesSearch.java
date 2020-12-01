@@ -21,7 +21,7 @@ public class HookeJeevesSearch {
                 Dx = Dx.multiplicationWithScalar((double) 1/2);
                 startingSearchPoint = new Vector(basePoint);
             }
-        } while(vectorComparison(Dx, epsilon.multiplicationWithScalar(0.5)) >= 0);
+        } while(vectorComparison(Dx, epsilon.multiplicationWithScalar(0.5)));
 
         return basePoint;
     }
@@ -43,14 +43,13 @@ public class HookeJeevesSearch {
         return x;
     }
 
-    private static int vectorComparison(Vector v1, Vector v2){
+    private static boolean vectorComparison(Vector v1, Vector v2){
         if(v1.getNumberOfRows() != v2.getNumberOfRows())
             throw new IllegalArgumentException("Vectors are not the same size");
         for (int i = 0; i < v1.getNumberOfRows(); i++) {
-            if(v1.getElementAt(i) < v2.getElementAt(i)) return -1;
-            if(v1.getElementAt(i) > v2.getElementAt(i)) return 1;
+            if(v1.getElementAt(i) > v2.getElementAt(i)) return true;
         }
-        return 0;
+        return false;
     }
 }
 
