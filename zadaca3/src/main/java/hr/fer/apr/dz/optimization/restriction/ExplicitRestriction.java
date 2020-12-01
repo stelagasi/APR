@@ -1,11 +1,17 @@
 package hr.fer.apr.dz.optimization.restriction;
 
-public class ExplicitRestriction extends Restriction {
-    private Double upperBound;
-    private Double lowerBound;
+import hr.fer.apr.lu.matrix.Vector;
 
-    public ExplicitRestriction(Double upperBound, Double lowerBound) {
-        this.upperBound = upperBound;
-        this.lowerBound = lowerBound;
+import java.util.function.Function;
+
+public class ExplicitRestriction extends Restriction {
+    private Function<Vector, Double> condition;
+
+    public ExplicitRestriction(Function<Vector, Double> condition){
+        this.condition = condition;
+    }
+
+    public Function<Vector, Double> getCondition() {
+        return condition;
     }
 }
