@@ -26,8 +26,8 @@ public class TransformationMethod {
         if(violatedRestrictions.size() > 0) {
             Function<Vector, Double> G = vector -> {
                 Double result = 0.0;
-                for (ImplicitRestriction violatedRestriction : violatedRestrictions) {
-                    result -= violatedRestriction.getCondition().apply(vector);
+                for (ImplicitRestriction implicitRestriction : implicitRestrictions) {
+                    result -= Math.min(0, implicitRestriction.getCondition().apply(vector));
                 }
                 return result;
             };
