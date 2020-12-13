@@ -3,12 +3,10 @@ package hr.fer.apr.geneticalgorithm.individual;
 import java.util.List;
 import java.util.Objects;
 
-public class DoubleIndividual implements Individual<Double> {
-    private final List<Double> chromosomes;
-    private double penalty;
+public class DoubleIndividual extends Individual<Double> {
 
     public DoubleIndividual(List<Double> chromosomes) {
-        this.chromosomes = chromosomes;
+        super(chromosomes);
     }
 
     public List<Double> getChromosomes() {

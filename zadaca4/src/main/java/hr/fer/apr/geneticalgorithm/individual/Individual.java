@@ -2,10 +2,26 @@ package hr.fer.apr.geneticalgorithm.individual;
 
 import java.util.List;
 
-public interface Individual<T> {
-    List<T> getChromosomes();
+public class Individual<T> implements IIndividual<T> {
+    protected final List<T> chromosomes;
+    protected double penalty;
 
-    double getPenalty();
+    public Individual(List<T> chromosomes) {
+        this.chromosomes = chromosomes;
+    }
 
-    void setPenalty(double penalty);
+    @Override
+    public List<T> getChromosomes() {
+        return chromosomes;
+    }
+
+    @Override
+    public double getPenalty() {
+        return penalty;
+    }
+
+    @Override
+    public void setPenalty(double penalty) {
+        this.penalty = penalty;
+    }
 }

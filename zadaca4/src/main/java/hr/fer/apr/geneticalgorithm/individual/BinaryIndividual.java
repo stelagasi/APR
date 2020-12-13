@@ -3,22 +3,10 @@ package hr.fer.apr.geneticalgorithm.individual;
 import java.util.List;
 import java.util.Objects;
 
-public class BinaryIndividual implements Individual<Boolean> {
-    private final List<Boolean> chromosomes;
-    private double penalty;
+public class BinaryIndividual extends Individual<List<Boolean>> {
 
-    public BinaryIndividual(List<Boolean> chromosomes) {
-        this.chromosomes = chromosomes;
-    }
-
-    @Override
-    public List<Boolean> getChromosomes() {
-        return chromosomes;
-    }
-
-    @Override
-    public double getPenalty() {
-        return penalty;
+    public BinaryIndividual(List<List<Boolean>> chromosomes) {
+        super(chromosomes);
     }
 
     @Override

@@ -1,64 +1,68 @@
 package hr.fer.apr.geneticalgorithm;
 
+import hr.fer.apr.geneticalgorithm.evaluator.IPopulationEvaluator;
+import hr.fer.apr.geneticalgorithm.function.IFunction;
+import hr.fer.apr.geneticalgorithm.individual.IIndividual;
+import hr.fer.apr.geneticalgorithm.individual.Individual;
+import hr.fer.apr.geneticalgorithm.initializer.IPopulationInitializer;
+import hr.fer.apr.geneticalgorithm.mutator.IMutator;
+import hr.fer.apr.geneticalgorithm.reproductioner.IReproductioner;
+import hr.fer.apr.geneticalgorithm.selectioner.ISelectioner;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class EliminationGeneticAlgorithm extends GeneticAlgorithm {
+public class EliminationGeneticAlgorithm<T extends Individual<?>> extends GeneticAlgorithm<T> {
     private static final double MORTALITY = 0.5;
-    private static final int NUMBER_OF_INDIVIDUALS_TO_SELECT = 3;
+    private final int numberOfIndividualsToSelect;
 
-    public EliminationGeneticAlgorithm(IFunction goalFunction, PopulationEvaluator populationEvaluator) {
-        super(goalFunction, populationEvaluator);
+    public EliminationGeneticAlgorithm(IPopulationInitializer<T> populationInitializer, IMutator<T> mutator, IReproductioner<T> reproductioner, ISelectioner<T> selectioner, IFunction<Double> goalFunction, IPopulationEvaluator<T> populationEvaluator, int numberOfIndividualsToSelect) {
+        super(populationInitializer, mutator, reproductioner, selectioner, goalFunction, populationEvaluator);
+        this.numberOfIndividualsToSelect = numberOfIndividualsToSelect;
     }
 
     @Override
-    public List<Individual> execute(int numberOfIterations) {
-        this.setPopulation(generateStartingPopulation());
-        PopulationEvaluator populationEvaluator = this.getPopulationEvaluator();
-        int neededIndividuals = (int) (MORTALITY * getNumberInPopulation());
+    public List<T> execute(int numberOfIterations, int numberOfEvaluations) {
+        this.setPopulation(this.populationInitializer.initialize());
+        IPopulationEvaluator<T> populationEvaluator = this.populationEvaluator;
+        int neededIndividuals = (int) (MORTALITY * population.size());
 
         for (int i = 0; i < numberOfIterations; i++) {
-            double populationPenalty = populationEvaluator.evaluatePenalty(this.getPopulation(), this.getGoalFunction());
+            if(goalFunction.getNumberOfEvaluations() == numberOfEvaluations) break;
+            populationEvaluator.evaluatePenalty(this.population, this.goalFunction);
             System.out.println(i + " " + populationEvaluator.getBestIndividual());
 
             for (int j = 0; j < neededIndividuals; j++) {
-                List<Individual> triple = selection(2, populationPenalty);
-                Individual worstOfThree = findWorst(triple);
-                triple.remove(worstOfThree);
-                Individual child = reproduction(triple);
-                mutation(List.of(child));
-                if (populationEvaluator.evaluatePenaltyOfIndividual(child, getGoalFunction()) < worstOfThree.getPenalty()) {
-                    getPopulation().remove(worstOfThree);
-                    getPopulation().add(child);
+                List<T> tournament = selectK();
+                T worst = findWorst(tournament);
+                tournament.remove(worst);
+                T child = reproductioner.reproduce(tournament);
+                mutator.mutate(List.of(child));
+                if (populationEvaluator.evaluatePenaltyOfIndividual(child, goalFunction) < worst.getPenalty()) {
+                    population.remove(worst);
+                    population.add(child);
                 }
             }
         }
-        return this.getPopulation();
+        return this.population;
     }
 
-    @Override
-    protected List<Individual> selection(int parentsNeeded, double populationFitness) {
-        List<Individual> triple = new ArrayList<>(NUMBER_OF_INDIVIDUALS_TO_SELECT);
-        for (int i = 0; i < NUMBER_OF_INDIVIDUALS_TO_SELECT; i++) {
-            triple.add(getPopulation().get(chooseIndividual()));
+    private List<T> selectK() {
+        List<T> triple = new ArrayList<>(numberOfIndividualsToSelect);
+        for (int i = 0; i < numberOfIndividualsToSelect; i++) {
+            triple.add(selectioner.select(population));
         }
         return triple;
     }
 
-    private int chooseIndividual() {
-        Random random = new Random();
-        return random.nextInt(getNumberInPopulation());
-    }
-
-    private Individual findWorst(List<Individual> triple) {
-        Individual worstOfThree = triple.get(0);
-        for (int i = 1; i < NUMBER_OF_INDIVIDUALS_TO_SELECT; i++) {
-            Individual individual = triple.get(i);
-            if (individual.getPenalty() > worstOfThree.getPenalty()) {
-                worstOfThree = individual;
+    private T findWorst(List<T> tournament) {
+        T worst = tournament.get(0);
+        for (int i = 1; i < numberOfIndividualsToSelect; i++) {
+            T individual = tournament.get(i);
+            if (individual.getPenalty() > worst.getPenalty()) {
+                worst = individual;
             }
         }
-        return worstOfThree;
+        return worst;
     }
 }
