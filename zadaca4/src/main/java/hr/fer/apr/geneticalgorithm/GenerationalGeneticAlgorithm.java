@@ -19,7 +19,6 @@ public class GenerationalGeneticAlgorithm<T extends Individual<K>, K> extends Ge
         this.elitism = elitism;
     }
 
-    //todo iskoristi numberOfEvaluations za uvjet isto
     @Override
     public T execute(int numberOfIterations, int numberOfEvaluations) {
         this.setPopulation(this.populationInitializer.initialize());
