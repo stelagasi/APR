@@ -1,7 +1,6 @@
 package hr.fer.apr.geneticalgorithm.evaluator;
 
 import hr.fer.apr.geneticalgorithm.function.IFunction;
-import hr.fer.apr.geneticalgorithm.individual.DoubleIndividual;
 import hr.fer.apr.geneticalgorithm.individual.IIndividual;
 
 import java.util.List;

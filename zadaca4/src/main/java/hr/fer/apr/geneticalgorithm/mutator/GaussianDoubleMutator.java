@@ -5,9 +5,9 @@ import hr.fer.apr.geneticalgorithm.individual.DoubleIndividual;
 import java.util.List;
 import java.util.Random;
 
-public class DoubleMutator extends Mutator<DoubleIndividual> {
+public class GaussianDoubleMutator extends Mutator<DoubleIndividual> {
 
-    public DoubleMutator(double mutationProbability, int mutationRange) {
+    public GaussianDoubleMutator(double mutationProbability, int mutationRange) {
         super(mutationProbability, mutationRange);
     }
 
@@ -19,8 +19,7 @@ public class DoubleMutator extends Mutator<DoubleIndividual> {
             List<Double> childChromosomes = child.getChromosomes();
             for (int i = 0; i < childChromosomes.size(); i++) {
                 if (random.nextDouble() < mutationProbability) {
-                    double mutation = random.nextDouble() * (mutationRange + mutationRange) - mutationRange;
-                    childChromosomes.set(i, childChromosomes.get(i) + mutation);
+                    childChromosomes.set(i, childChromosomes.get(i) + random.nextGaussian() * 0.5);
                 }
             }
         }

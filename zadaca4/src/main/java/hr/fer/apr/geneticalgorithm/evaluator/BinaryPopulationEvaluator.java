@@ -73,10 +73,12 @@ public class BinaryPopulationEvaluator implements IPopulationEvaluator<BinaryInd
     }
 
     public double evaluatePenaltyOfIndividual(BinaryIndividual individual, IFunction<Double> goalFunction) {
-        return Math.abs(goalFunction.valueAt(getDoubleRepresentation(individual).getChromosomes()));
+        var penalty = Math.abs(goalFunction.valueAt(getDoubleRepresentation(individual).getChromosomes()));
+        individual.setPenalty(penalty);
+        return penalty;
     }
 
-    private DoubleIndividual getDoubleRepresentation(BinaryIndividual individual){
+    public DoubleIndividual getDoubleRepresentation(BinaryIndividual individual){
         List<List<Boolean>> binaryChromosomes = individual.getChromosomes();
         List<Double> doubleChromosomes = new ArrayList<>(binaryChromosomes.size());
 
@@ -89,8 +91,9 @@ public class BinaryPopulationEvaluator implements IPopulationEvaluator<BinaryInd
             }
             doubleChromosomes.add(lowerBound + b * (upperBound - lowerBound) / (pow(2, binaryChromosome.size()) - 1));
         }
-
-        return new DoubleIndividual(doubleChromosomes);
+        DoubleIndividual doubleRepresentation = new DoubleIndividual(doubleChromosomes);
+        doubleRepresentation.setPenalty(individual.getPenalty());
+        return doubleRepresentation;
     }
 
     public void setWorstIndividual(BinaryIndividual worstIndividual) {

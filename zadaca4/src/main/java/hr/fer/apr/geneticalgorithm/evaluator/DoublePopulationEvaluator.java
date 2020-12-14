@@ -1,7 +1,6 @@
 package hr.fer.apr.geneticalgorithm.evaluator;
 
 import hr.fer.apr.geneticalgorithm.function.IFunction;
-import hr.fer.apr.geneticalgorithm.individual.BinaryIndividual;
 import hr.fer.apr.geneticalgorithm.individual.DoubleIndividual;
 
 import java.util.List;
@@ -55,7 +54,9 @@ public class DoublePopulationEvaluator implements IPopulationEvaluator<DoubleInd
     }
 
     public double evaluatePenaltyOfIndividual(DoubleIndividual individual, IFunction<Double> goalFunction) {
-        return Math.abs(goalFunction.valueAt(individual.getChromosomes()));
+        var result = Math.abs(goalFunction.valueAt(individual.getChromosomes()));
+        individual.setPenalty(result);
+        return result;
     }
 
     public DoubleIndividual getWorstIndividual() {

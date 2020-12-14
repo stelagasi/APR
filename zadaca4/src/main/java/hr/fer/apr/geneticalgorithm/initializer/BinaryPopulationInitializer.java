@@ -6,12 +6,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import static java.lang.Math.*;
+
 public class BinaryPopulationInitializer extends PopulationInitializer<BinaryIndividual> {
     private final int numberOfBitsInChromosome;
 
-    public BinaryPopulationInitializer(int populationSize, int numberOfChromosomes, int numberOfBitsInChromosome) {
+    public BinaryPopulationInitializer(int populationSize, int numberOfChromosomes, int precision, int lowerBound, int upperBound) {
         super(populationSize, numberOfChromosomes);
-        this.numberOfBitsInChromosome = numberOfBitsInChromosome;
+        this.numberOfBitsInChromosome = (int) ceil(log10((upperBound - lowerBound) * pow(10, precision) + 1) / log10(2));
     }
 
     @Override

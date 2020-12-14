@@ -34,7 +34,7 @@ public class FunctionGenerator {
                 numberOfEvaluations++;
                 double value = 0;
                 for (int i = 0; i < n; i++) {
-                    value += pow(chromosomes.get(i) - i + 1, 2);
+                    value += pow(chromosomes.get(i) - i, 2);
                 }
                 return value;
             }

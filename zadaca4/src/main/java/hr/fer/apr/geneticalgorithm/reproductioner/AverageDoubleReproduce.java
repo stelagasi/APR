@@ -5,8 +5,7 @@ import hr.fer.apr.geneticalgorithm.individual.DoubleIndividual;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DoubleReproductioner implements IReproductioner<DoubleIndividual> {
-
+public class AverageDoubleReproduce implements IReproductioner<DoubleIndividual> {
     @Override
     public DoubleIndividual reproduce(DoubleIndividual firstParent, DoubleIndividual secondParent) {
         List<Double> firstParentChromosomes = firstParent.getChromosomes();
@@ -17,7 +16,7 @@ public class DoubleReproductioner implements IReproductioner<DoubleIndividual> {
         List<Double> childChromosomes = new ArrayList<>();
 
         for (int i = 0; i < childSize; i++) {
-            childChromosomes.add((firstParentChromosomes.get(i) * 1.5 + secondParentChromosomes.get(i) * 0.5) / 2);
+            childChromosomes.add((firstParentChromosomes.get(i) + secondParentChromosomes.get(i)) / 2);
         }
         return new DoubleIndividual(childChromosomes);
     }

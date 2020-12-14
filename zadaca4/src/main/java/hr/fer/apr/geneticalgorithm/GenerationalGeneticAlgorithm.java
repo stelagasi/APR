@@ -1,71 +1,62 @@
 package hr.fer.apr.geneticalgorithm;
 
+import hr.fer.apr.geneticalgorithm.evaluator.IPopulationEvaluator;
+import hr.fer.apr.geneticalgorithm.function.IFunction;
+import hr.fer.apr.geneticalgorithm.individual.Individual;
+import hr.fer.apr.geneticalgorithm.initializer.IPopulationInitializer;
+import hr.fer.apr.geneticalgorithm.mutator.IMutator;
+import hr.fer.apr.geneticalgorithm.reproductioner.IReproductioner;
+import hr.fer.apr.geneticalgorithm.selectioner.ISelectioner;
+
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
-public class GenerationalGeneticAlgorithm extends GeneticAlgorithm {
+public class GenerationalGeneticAlgorithm<T extends Individual<K>, K> extends GeneticAlgorithm<T> {
     private final boolean elitism;
 
-    public GenerationalGeneticAlgorithm(IFunction goalFunction, PopulationEvaluator populationEvaluator, boolean elitism) {
-        super(goalFunction, populationEvaluator);
+    public GenerationalGeneticAlgorithm(IPopulationInitializer<T> populationInitializer, IMutator<T> mutator, IReproductioner<T> reproductioner, ISelectioner<T> selectioner, IFunction<Double> goalFunction, IPopulationEvaluator<T> populationEvaluator, boolean elitism) {
+        super(populationInitializer, mutator, reproductioner, selectioner, goalFunction, populationEvaluator);
         this.elitism = elitism;
     }
 
+    //todo iskoristi numberOfEvaluations za uvjet isto
     @Override
-    public List<Individual> execute(int numberOfIterations) {
-        this.setPopulation(generateStartingPopulation());
-        PopulationEvaluator populationEvaluator = this.getPopulationEvaluator();
+    public T execute(int numberOfIterations, int numberOfEvaluations) {
+        this.setPopulation(this.populationInitializer.initialize());
+        IPopulationEvaluator<T> populationEvaluator = this.populationEvaluator;
 
         for (int i = 0; i < numberOfIterations; i++) {
-            int individualsNeeded = getInitialPopulationSize();
-            List<Individual> nextPopulation = new ArrayList<>(individualsNeeded);
-            double populationFitness = populationEvaluator.evaluatePenalty(this.getPopulation(), this.getGoalFunction());
+            if (goalFunction.getNumberOfEvaluations() >= numberOfEvaluations) break;
+            int individualsNeeded = this.populationInitializer.getPopulationSize();
+            List<T> nextPopulation = new ArrayList<>(individualsNeeded);
+            populationEvaluator.evaluatePenalty(this.population, this.goalFunction);
             System.out.println(i + " " + populationEvaluator.getBestIndividual());
             if (elitism) {
                 nextPopulation.add(populationEvaluator.getBestIndividual());
                 individualsNeeded--;
             }
-            List<Individual> parents = selection(2 * individualsNeeded, populationFitness);
-            List<Individual> children = multipleReproduction(parents);
-            mutation(children);
+            List<T> parents = selection(2 * individualsNeeded);
+            List<T> children = reproductioner.reproduceMultiple(parents);
+            mutator.mutate(children);
             nextPopulation.addAll(children);
             this.setPopulation(nextPopulation);
         }
-        return this.getPopulation();
+
+        populationEvaluator.evaluatePenalty(this.population, goalFunction);
+        return populationEvaluator.getBestIndividual();
     }
 
-    @Override
-    protected List<Individual> selection(int parentsNeeded, double populationFitness) {
-        List<Individual> parents = new ArrayList<>(parentsNeeded);
-        List<Individual> copy = new ArrayList<>(getNumberInPopulation());
-        for (int i = 0; i < getNumberInPopulation(); i++) {
-            copy.add(new Individual(getPopulation().get(i).getChromosomes()));
-        }
-        getPopulationEvaluator().evaluateFitness(copy, getGoalFunction());
+    private List<T> selection(int parentsNeeded) {
+        List<T> parents = new ArrayList<>(parentsNeeded);
+        List<T> copy = new ArrayList<>(population.size());
+//        for (int i = 0; i < population.size(); i++) {
+//            copy.add(new T(population.get(i).getChromosomes()));
+//        }
+        populationEvaluator.evaluateFitness(copy, goalFunction);
 
         for (int i = 0; i < parentsNeeded; i++) {
-            parents.add(this.getPopulation().get(chooseIndividual(copy, populationFitness)));
+            parents.add(selectioner.select(copy));
         }
         return parents;
-    }
-
-    private List<Individual> multipleReproduction(List<Individual> parents) {
-        List<Individual> children = new ArrayList<>(parents.size() / 2);
-        for (int i = 0; i < parents.size(); i += 2) {
-            children.add(reproduction(List.of(parents.get(i), parents.get(i + 1))));
-        }
-        return children;
-    }
-
-    private int chooseIndividual(List<Individual> population, double populationFitness) {
-        Random random = new Random();
-        int chosen = 0;
-        double limit = random.nextDouble() * populationFitness;
-        double upperLimit = population.get(0).getPenalty();
-        while (limit > upperLimit && chosen < population.size() - 1) {
-            upperLimit += population.get(++chosen).getPenalty();
-        }
-        return chosen;
     }
 }

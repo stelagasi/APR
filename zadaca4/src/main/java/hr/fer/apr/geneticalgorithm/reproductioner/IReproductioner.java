@@ -5,5 +5,7 @@ import hr.fer.apr.geneticalgorithm.individual.IIndividual;
 import java.util.List;
 
 public interface IReproductioner<T extends IIndividual<?>> {
-    T reproduce(List<T> parents);
+    T reproduce(T firstParent, T secondParent);
+
+    List<T> reproduceMultiple(List<T> parents);
 }
