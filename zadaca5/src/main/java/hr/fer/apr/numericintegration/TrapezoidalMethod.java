@@ -25,20 +25,18 @@ public class TrapezoidalMethod implements ImplicitMethod {
         }
 
         SquareMatrix expression = (SquareMatrix) subtraction(U, A.multiplicationWithScalar(T / 2));
-        this.R = matrixMultiplication(inverseOfMatrix(expression), expression);
+        this.R = matrixMultiplication(inverseOfMatrix(expression), addition(U, A.multiplicationWithScalar(T / 2)));
         this.S = matrixMultiplication(inverseOfMatrix(expression).multiplicationWithScalar(T / 2), B);
     }
 
     @Override
     public Vector apply(Vector x0, String[] rt, double T, double tMax) {
-        Vector xCurrent = x0;
-        Vector xNext;
+        Vector x = new Vector(x0);
 
-        for (double i = T; i < tMax + 0.0001; i = i + T) {
-            xNext = addition(new Vector(matrixMultiplication(R, xCurrent)), new Vector(matrixMultiplication(S, addition(getRt(rt, i - T), getRt(rt, i)))));
-            xCurrent = xNext;
+        for (double i = T; i <= tMax; i = i + T) {
+            x = addition(new Vector(matrixMultiplication(R, x)), new Vector(matrixMultiplication(S, addition(getRt(rt, i - T), getRt(rt, i)))));
         }
 
-        return xCurrent;
+        return x;
     }
 }
