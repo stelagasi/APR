@@ -10,15 +10,13 @@ public class EulerMethod implements ExplicitMethod {
 
     @Override
     public Vector apply(Matrix A, Vector x0, Matrix B, String[] rt, double T, double tMax) {
-        Vector xCurrent = x0;
-        Vector xNext;
+        Vector x = new Vector(x0);
 
-        for (double i = T; i < tMax + 0.0001; i = i + T) {
-            Vector deltaX = getDeltaX(A, xCurrent, B, rt, i - T);
-            xNext = addition(xCurrent, deltaX.multiplicationWithScalar(T));
-            xCurrent = xNext;
+        for (double i = T; i <= tMax; i = i + T) {
+            Vector deltaX = getDeltaX(A, x, B, rt, i - T);
+            x = addition(x, deltaX.multiplicationWithScalar(T));
         }
 
-        return xCurrent;
+        return x;
     }
 }

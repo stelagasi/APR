@@ -31,14 +31,12 @@ public class BackwardEulerMethod implements ImplicitMethod {
 
     @Override
     public Vector apply(Vector x0, String[] rt, double T, double tMax) {
-        Vector xCurrent = x0;
-        Vector xNext;
+        Vector x = new Vector(x0);
 
-        for (double i = T; i < tMax + 0.0001; i = i + T) {
-            xNext = addition(new Vector(matrixMultiplication(P, xCurrent)), new Vector(matrixMultiplication(Q, getRt(rt, i))));
-            xCurrent = xNext;
+        for (double i = T; i <= tMax; i = i + T) {
+            x = addition(new Vector(matrixMultiplication(P, x)), new Vector(matrixMultiplication(Q, getRt(rt, i))));
         }
 
-        return xCurrent;
+        return x;
     }
 }
