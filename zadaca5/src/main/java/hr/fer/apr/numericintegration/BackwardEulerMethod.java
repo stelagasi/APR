@@ -8,6 +8,7 @@ import static hr.fer.apr.lu.TaskSolver.inverseOfMatrix;
 import static hr.fer.apr.lu.matrix.Matrix.matrixMultiplication;
 import static hr.fer.apr.lu.matrix.Matrix.subtraction;
 import static hr.fer.apr.lu.matrix.Vector.addition;
+import static hr.fer.apr.numericintegration.MethodHelper.getDeltaX;
 import static hr.fer.apr.numericintegration.MethodHelper.getRt;
 
 public class BackwardEulerMethod implements ImplicitMethod {
@@ -38,8 +39,7 @@ public class BackwardEulerMethod implements ImplicitMethod {
 
     @Override
     public Vector apply(Vector x0, String[] rt, double T, double tMin, double tMax, int numberOfPrintingIteration, boolean calculateError) {
-        methodHelper.resetError();
-        int iterationNumber = 1;
+        int iterationNumber = 0;
         Vector x = new Vector(x0);
         x1 = new double[(int) (tMax/T)+1];
         x2 = new double[(int) (tMax/T)+1];
@@ -58,8 +58,8 @@ public class BackwardEulerMethod implements ImplicitMethod {
     }
 
     @Override
-    public Vector apply2(Matrix A, Matrix B, Vector x0, Vector xApprox, String[] rt, double T, double tMin, double tMax, int numberOfPrintingIteration, boolean calculateError) {
-        return null;
+    public Vector correct(Matrix A, Matrix B, Vector x0, Vector xApprox, String[] rt, double T, double t) {
+        return addition(x0, getDeltaX(A, xApprox, B, rt, t).multiplicationWithScalar(T));
     }
 
     public MethodHelper getMethodHelper() {

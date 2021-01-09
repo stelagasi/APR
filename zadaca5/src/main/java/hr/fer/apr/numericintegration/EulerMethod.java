@@ -18,7 +18,7 @@ public class EulerMethod implements ExplicitMethod {
     @Override
     public Vector apply(Matrix A, Vector x0, Matrix B, String[] rt, double T, double tMin, double tMax, int numberOfPrintingIteration, boolean calculateError) {
         Vector x = new Vector(x0);
-        int iterationNumber = 1;
+        int iterationNumber = 0;
         x1 = new double[(int) (tMax/T)+1];
         x2 = new double[(int) (tMax/T)+1];
 

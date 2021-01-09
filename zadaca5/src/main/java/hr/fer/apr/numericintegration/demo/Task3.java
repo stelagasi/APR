@@ -54,7 +54,7 @@ public class Task3 {
         new SwingWrapper(chart5).displayChart();
 
         PredictorCorrectorMethod predictorCorrectorMethod2 = new PredictorCorrectorMethod(new EulerMethod(new MethodHelper(null)), new TrapezoidalMethod(new MethodHelper(null)), new MethodHelper(null));
-        predictorCorrectorMethod2.apply(A, x0, B, rt, T, tMax, 2, 1, false);
+        predictorCorrectorMethod2.apply(A, x0, B, rt, T, tMax, 1, 1, false);
         XYChart chart6 = new XYChartBuilder().width(800).height(600).title("PECE - Euler, trapezni").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
         chart6.addSeries("x1", predictorCorrectorMethod2.getX1());
         chart6.addSeries("x2", predictorCorrectorMethod2.getX2());
