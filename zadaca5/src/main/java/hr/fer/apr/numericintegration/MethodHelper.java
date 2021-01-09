@@ -54,6 +54,11 @@ public class MethodHelper {
         return error;
     }
 
+    public void resetError(){
+        error.setElementAt(0, 0);
+        error.setElementAt(1, 0);
+    }
+
     public StringBuilder getStringBuilder() {
         return stringBuilder;
     }

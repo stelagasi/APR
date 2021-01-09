@@ -37,13 +37,14 @@ public class BackwardEulerMethod implements ImplicitMethod {
     }
 
     @Override
-    public Vector apply(Vector x0, String[] rt, double T, double tMax, int numberOfPrintingIteration, boolean calculateError) {
+    public Vector apply(Vector x0, String[] rt, double T, double tMin, double tMax, int numberOfPrintingIteration, boolean calculateError) {
+        methodHelper.resetError();
         int iterationNumber = 1;
         Vector x = new Vector(x0);
         x1 = new double[(int) (tMax/T)+1];
         x2 = new double[(int) (tMax/T)+1];
 
-        for (double i = T; i <= tMax; i = i + T) {
+        for (double i = tMin; i <= tMax; i = i + T) {
             x = addition(new Vector(matrixMultiplication(P, x)), new Vector(matrixMultiplication(Q, getRt(rt, i))));
             if(numberOfPrintingIteration !=0 && iterationNumber++ % numberOfPrintingIteration == 0) {
                 methodHelper.getStringBuilder().append(i).append(" ").append(x).append(System.lineSeparator());
@@ -54,6 +55,11 @@ public class BackwardEulerMethod implements ImplicitMethod {
         }
 
         return x;
+    }
+
+    @Override
+    public Vector apply2(Matrix A, Matrix B, Vector x0, Vector xApprox, String[] rt, double T, double tMin, double tMax, int numberOfPrintingIteration, boolean calculateError) {
+        return null;
     }
 
     public MethodHelper getMethodHelper() {

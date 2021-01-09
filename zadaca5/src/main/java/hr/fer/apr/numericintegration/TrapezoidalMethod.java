@@ -8,6 +8,7 @@ import static hr.fer.apr.lu.TaskSolver.inverseOfMatrix;
 import static hr.fer.apr.lu.matrix.Matrix.matrixMultiplication;
 import static hr.fer.apr.lu.matrix.Matrix.subtraction;
 import static hr.fer.apr.lu.matrix.Vector.addition;
+import static hr.fer.apr.numericintegration.MethodHelper.getDeltaX;
 import static hr.fer.apr.numericintegration.MethodHelper.getRt;
 
 public class TrapezoidalMethod implements ImplicitMethod {
@@ -37,18 +38,36 @@ public class TrapezoidalMethod implements ImplicitMethod {
     }
 
     @Override
-    public Vector apply(Vector x0, String[] rt, double T, double tMax, int numberOfPrintingIteration, boolean calculateError) {
+    public Vector apply(Vector x0, String[] rt, double T, double tMin, double tMax, int numberOfPrintingIteration, boolean calculateError) {
+        methodHelper.resetError();
         Vector x = new Vector(x0);
         int iterationNumber = 1;
         x1 = new double[(int) (tMax/T)+1];
         x2 = new double[(int) (tMax/T)+1];
 
-        for (double i = T; i <= tMax; i = i + T) {
+        for (double i = tMin; i <= tMax; i = i + T) {
             x = addition(new Vector(matrixMultiplication(R, x)), new Vector(matrixMultiplication(S, addition(getRt(rt, i - T), getRt(rt, i)))));
             if(numberOfPrintingIteration != 0 && iterationNumber++ % numberOfPrintingIteration == 0) {
                 methodHelper.getStringBuilder().append(x).append(System.lineSeparator());
                 x1[iterationNumber-1] = x.getElementAt(0);
                 x2[iterationNumber-1] = x.getElementAt(1);
+            }
+            if (calculateError) methodHelper.calculateError(x, i);
+        }
+
+        return x;
+    }
+
+    public Vector apply2(Matrix A, Matrix B, Vector x0, Vector xApprox, String[] rt, double T, double tMin, double tMax, int numberOfPrintingIteration, boolean calculateError) {
+       // methodHelper.resetError();
+        Vector x = new Vector(x0);
+        int iterationNumber = 1;
+
+        for (double i = tMin; i <= tMax; i = i + T) {
+            x = addition(x, addition(getDeltaX(A, x, B, rt, i - T), getDeltaX(A, xApprox, B, rt, i)).multiplicationWithScalar(T/2));
+           // x = addition(new Vector(matrixMultiplication(R, x)), new Vector(matrixMultiplication(S, addition(getRt(rt, i - T), getRt(rt, i)))));
+            if(numberOfPrintingIteration != 0 && iterationNumber++ % numberOfPrintingIteration == 0) {
+                methodHelper.getStringBuilder().append(x).append(System.lineSeparator());
             }
             if (calculateError) methodHelper.calculateError(x, i);
         }

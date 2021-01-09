@@ -17,7 +17,7 @@ public class Task3 {
         double T = 0.01, tMax = 10;
 
         RungeKuttaMethod rungeKuttaMethod = new RungeKuttaMethod(new MethodHelper(null));
-        rungeKuttaMethod.apply(A, x0, B, rt, T, tMax, 1, false);
+        rungeKuttaMethod.apply(A, x0, B, rt, T, T, tMax, 1, false);
         XYChart chart1 = new XYChartBuilder().width(800).height(600).title("Runge-Kutta").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
         chart1.addSeries("x1", rungeKuttaMethod.getX1());
         chart1.addSeries("x2", rungeKuttaMethod.getX2());
@@ -25,14 +25,14 @@ public class Task3 {
 
         TrapezoidalMethod trapezoidalMethod = new TrapezoidalMethod(new MethodHelper(null));
         trapezoidalMethod.transformToExplicit(A, B, T);
-        trapezoidalMethod.apply(x0, rt, T, tMax, 1, false);
+        trapezoidalMethod.apply(x0, rt, T, T, tMax, 1, false);
         XYChart chart2 = new XYChartBuilder().width(800).height(600).title("Trapezni").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
         chart2.addSeries("x1", trapezoidalMethod.getX1());
         chart2.addSeries("x2", trapezoidalMethod.getX2());
         new SwingWrapper(chart2).displayChart();
 
         EulerMethod eulerMethod = new EulerMethod(new MethodHelper(null));
-        eulerMethod.apply(A, x0, B, rt, T, tMax, 1, false);
+        eulerMethod.apply(A, x0, B, rt, T, T, tMax, 1, false);
         XYChart chart3 = new XYChartBuilder().width(800).height(600).title("Euler").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
         chart3.addSeries("x1", eulerMethod.getX1());
         chart3.addSeries("x2", eulerMethod.getX2());
@@ -40,7 +40,7 @@ public class Task3 {
 
         BackwardEulerMethod backwardEulerMethod = new BackwardEulerMethod(new MethodHelper(null));
         backwardEulerMethod.transformToExplicit(A, B, T);
-        backwardEulerMethod.apply(x0, rt, T, tMax, 1, false);
+        backwardEulerMethod.apply(x0, rt, T, T, tMax, 1, false);
         XYChart chart4 = new XYChartBuilder().width(800).height(600).title("Obrnuti Euler").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
         chart4.addSeries("x1", backwardEulerMethod.getX1());
         chart4.addSeries("x2", backwardEulerMethod.getX2());

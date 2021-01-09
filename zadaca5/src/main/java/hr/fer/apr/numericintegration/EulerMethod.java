@@ -16,13 +16,13 @@ public class EulerMethod implements ExplicitMethod {
     }
 
     @Override
-    public Vector apply(Matrix A, Vector x0, Matrix B, String[] rt, double T, double tMax, int numberOfPrintingIteration, boolean calculateError) {
+    public Vector apply(Matrix A, Vector x0, Matrix B, String[] rt, double T, double tMin, double tMax, int numberOfPrintingIteration, boolean calculateError) {
         Vector x = new Vector(x0);
         int iterationNumber = 1;
         x1 = new double[(int) (tMax/T)+1];
         x2 = new double[(int) (tMax/T)+1];
 
-        for (double i = T; i <= tMax; i = i + T) {
+        for (double i = tMin; i <= tMax; i = i + T) {
             Vector deltaX = getDeltaX(A, x, B, rt, i - T);
             x = addition(x, deltaX.multiplicationWithScalar(T));
             if(numberOfPrintingIteration != 0 && iterationNumber++ % numberOfPrintingIteration == 0) {
