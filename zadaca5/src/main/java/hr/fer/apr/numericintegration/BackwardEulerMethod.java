@@ -13,8 +13,6 @@ import static hr.fer.apr.numericintegration.MethodHelper.getRt;
 
 public class BackwardEulerMethod implements ImplicitMethod {
     private final MethodHelper methodHelper;
-    private double[] x1;
-    private double[] x2;
     private Matrix P;
     private Matrix Q;
 
@@ -38,20 +36,15 @@ public class BackwardEulerMethod implements ImplicitMethod {
     }
 
     @Override
-    public Vector apply(Vector x0, String[] rt, double T, double tMin, double tMax, int numberOfPrintingIteration, boolean calculateError) {
-        int iterationNumber = 0;
+    public Vector apply(Vector x0, String[] rt, double T, double tMax, boolean calculateError) {
         Vector x = new Vector(x0);
-        x1 = new double[(int) (tMax/T)+1];
-        x2 = new double[(int) (tMax/T)+1];
 
-        for (double i = tMin; i <= tMax; i = i + T) {
+        for (double i = T; i <= tMax; i = i + T) {
             x = addition(new Vector(matrixMultiplication(P, x)), new Vector(matrixMultiplication(Q, getRt(rt, i))));
-            if(numberOfPrintingIteration !=0 && iterationNumber++ % numberOfPrintingIteration == 0) {
-                methodHelper.getStringBuilder().append(i).append(" ").append(x).append(System.lineSeparator());
-                x1[iterationNumber-1] = x.getElementAt(0);
-                x2[iterationNumber-1] = x.getElementAt(1);
-            }
-            if(calculateError) methodHelper.calculateError(x, i);
+
+            methodHelper.addToHistory(x);
+
+            if (calculateError) methodHelper.calculateError(x, i);
         }
 
         return x;
@@ -64,13 +57,5 @@ public class BackwardEulerMethod implements ImplicitMethod {
 
     public MethodHelper getMethodHelper() {
         return methodHelper;
-    }
-
-    public double[] getX1() {
-        return x1;
-    }
-
-    public double[] getX2() {
-        return x2;
     }
 }

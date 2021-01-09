@@ -3,12 +3,14 @@ package hr.fer.apr.numericintegration;
 import hr.fer.apr.lu.matrix.Matrix;
 import hr.fer.apr.lu.matrix.Vector;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
 public class MethodHelper {
     private final Function<Double, Vector> function;
     private final Vector error = new Vector(2, new double[2]);
-    private final StringBuilder stringBuilder = new StringBuilder();
+    private final List<Vector> history = new ArrayList<>();
 
     public MethodHelper(Function<Double, Vector> function){
         this.function = function;
@@ -46,21 +48,13 @@ public class MethodHelper {
     public void calculateError(Vector x, Double t) {
         error.setElementAt(0, error.getElementAt(0) + Math.abs(x.getElementAt(0) - function.apply(t).getElementAt(0)));
         error.setElementAt(1, error.getElementAt(1) + Math.abs(x.getElementAt(1) - function.apply(t).getElementAt(1)));
-    //    System.out.println(Math.abs(x.getElementAt(0) - function.apply(t).getElementAt(0)));
-    //    System.out.println(Math.abs(x.getElementAt(1) - function.apply(t).getElementAt(1)));
     }
+
+    public void addToHistory(Vector x){ history.add(x); }
+
+    public List<Vector> getHistory() { return history; }
 
     public Vector getError() {
         return error;
     }
-
-    public void resetError(){
-        error.setElementAt(0, 0);
-        error.setElementAt(1, 0);
-    }
-
-    public StringBuilder getStringBuilder() {
-        return stringBuilder;
-    }
-
 }
