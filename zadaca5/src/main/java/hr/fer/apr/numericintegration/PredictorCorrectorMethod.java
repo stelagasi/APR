@@ -18,7 +18,7 @@ public class PredictorCorrectorMethod {
         Vector xCurrent = new Vector(x0);
         Vector xNext = new Vector(x0);
 
-        for(double i = T; i <= tMax; i = i + T){
+        for(double i = T; i <= tMax; i += T){
             Vector xApprox = predictor.predict(A, xCurrent, B, rt, T, i);
 
             for (int j = 0; j < numberOfCorrectorApplies; j++) {

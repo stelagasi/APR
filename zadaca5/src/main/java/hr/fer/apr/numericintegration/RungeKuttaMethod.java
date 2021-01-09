@@ -17,7 +17,7 @@ public class RungeKuttaMethod implements ExplicitMethod {
     public Vector apply(Matrix A, Vector x0, Matrix B, String[] rt, double T, double tMax, boolean calculateError) {
         Vector x = new Vector(x0);
 
-        for (double i = T; i <= tMax; i = i + T) {
+        for (double i = T; i <= tMax; i += T) {
 
             Vector m1 = getDeltaX(A, x, B, rt, i - T);
             Vector m2 = getDeltaX(A, addition(x, m1.multiplicationWithScalar(T / 2)), B, rt, (i - T) + T / 2);

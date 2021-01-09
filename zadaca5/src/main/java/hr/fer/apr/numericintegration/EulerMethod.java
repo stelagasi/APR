@@ -17,7 +17,7 @@ public class EulerMethod implements Predictor {
     public Vector apply(Matrix A, Vector x0, Matrix B, String[] rt, double T, double tMax, boolean calculateError) {
         Vector x = new Vector(x0);
 
-        for (double i = T; i <= tMax; i = i + T) {
+        for (double i = T; i <= tMax; i += T) {
             Vector deltaX = getDeltaX(A, x, B, rt, i - T);
             x = addition(x, deltaX.multiplicationWithScalar(T));
 

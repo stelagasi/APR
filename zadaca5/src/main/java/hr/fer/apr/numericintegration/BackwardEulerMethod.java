@@ -39,7 +39,7 @@ public class BackwardEulerMethod implements ImplicitMethod {
     public Vector apply(Vector x0, String[] rt, double T, double tMax, boolean calculateError) {
         Vector x = new Vector(x0);
 
-        for (double i = T; i <= tMax; i = i + T) {
+        for (double i = T; i <= tMax; i += T) {
             x = addition(new Vector(matrixMultiplication(P, x)), new Vector(matrixMultiplication(Q, getRt(rt, i))));
 
             methodHelper.addToHistory(x);

@@ -25,13 +25,18 @@ public class Task1 {
 
         double T = 0.01, tMax = 10;
 
+        double[] xData = new double[(int) (tMax/T)];
+        for (int i = 1; i < xData.length; i++) {
+            xData[i] = xData[i-1] + T;
+        }
+
         RungeKuttaMethod rungeKuttaMethod = new RungeKuttaMethod(new MethodHelper(function));
         rungeKuttaMethod.apply(A, x0, B, null, T, tMax, true);
         System.out.println("Runge-Kutta: ");
         System.out.println(rungeKuttaMethod.getMethodHelper().getError());
         XYChart chart1 = new XYChartBuilder().width(800).height(600).title("Runge-Kutta").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
-        chart1.addSeries("x1", rungeKuttaMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
-        chart1.addSeries("x2", rungeKuttaMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
+        chart1.addSeries("x1", xData, rungeKuttaMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
+        chart1.addSeries("x2", xData, rungeKuttaMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
         new SwingWrapper(chart1).displayChart();
 
         TrapezoidalMethod trapezoidalMethod = new TrapezoidalMethod(new MethodHelper(function));
@@ -40,8 +45,8 @@ public class Task1 {
         System.out.println("Trapezni: ");
         System.out.println(trapezoidalMethod.getMethodHelper().getError());
         XYChart chart2 = new XYChartBuilder().width(800).height(600).title("Trapezni").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
-        chart2.addSeries("x1", trapezoidalMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
-        chart2.addSeries("x2", trapezoidalMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
+        chart2.addSeries("x1", xData, trapezoidalMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
+        chart2.addSeries("x2", xData, trapezoidalMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
         new SwingWrapper(chart2).displayChart();
 
         EulerMethod eulerMethod = new EulerMethod(new MethodHelper(function));
@@ -49,8 +54,8 @@ public class Task1 {
         System.out.println("Euler: ");
         System.out.println(eulerMethod.getMethodHelper().getError());
         XYChart chart3 = new XYChartBuilder().width(800).height(600).title("Euler").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
-        chart3.addSeries("x1", eulerMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
-        chart3.addSeries("x2", eulerMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
+        chart3.addSeries("x1", xData, eulerMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
+        chart3.addSeries("x2", xData, eulerMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
         new SwingWrapper(chart3).displayChart();
 
         BackwardEulerMethod backwardEulerMethod = new BackwardEulerMethod(new MethodHelper(function));
@@ -59,8 +64,8 @@ public class Task1 {
         System.out.println("Obrnuti Euler: ");
         System.out.println(backwardEulerMethod.getMethodHelper().getError());
         XYChart chart4 = new XYChartBuilder().width(800).height(600).title("Obrnuti Euler").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
-        chart4.addSeries("x1", backwardEulerMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
-        chart4.addSeries("x2", backwardEulerMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
+        chart4.addSeries("x1", xData, backwardEulerMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
+        chart4.addSeries("x2", xData, backwardEulerMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
         new SwingWrapper(chart4).displayChart();
 
         PredictorCorrectorMethod predictorCorrectorMethod = new PredictorCorrectorMethod(new EulerMethod(new MethodHelper(function)), new BackwardEulerMethod(new MethodHelper(function)), new MethodHelper(function));
@@ -68,8 +73,8 @@ public class Task1 {
         System.out.println("PE(CE)^2 - Euler, obrnuti Euler:");
         System.out.println(predictorCorrectorMethod.getMethodHelper().getError());
         XYChart chart5 = new XYChartBuilder().width(800).height(600).title("PE(CE)^2 - Euler, obrnuti Euler").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
-        chart5.addSeries("x1", predictorCorrectorMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
-        chart5.addSeries("x2", predictorCorrectorMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
+        chart5.addSeries("x1", xData, predictorCorrectorMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
+        chart5.addSeries("x2", xData, predictorCorrectorMethod.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
         new SwingWrapper(chart5).displayChart();
 
         PredictorCorrectorMethod predictorCorrectorMethod2 = new PredictorCorrectorMethod(new EulerMethod(new MethodHelper(function)), new TrapezoidalMethod(new MethodHelper(function)), new MethodHelper(function));
@@ -77,8 +82,8 @@ public class Task1 {
         System.out.println("PECE - Euler, trapezni:");
         System.out.println(predictorCorrectorMethod2.getMethodHelper().getError());
         XYChart chart6 = new XYChartBuilder().width(800).height(600).title("PECE - Euler, trapezni").xAxisTitle("t").yAxisTitle("Varijabla stanja").build();
-        chart6.addSeries("x1", predictorCorrectorMethod2.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
-        chart6.addSeries("x2", predictorCorrectorMethod2.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
+        chart6.addSeries("x1", xData, predictorCorrectorMethod2.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(0)).toArray());
+        chart6.addSeries("x2", xData, predictorCorrectorMethod2.getMethodHelper().getHistory().stream().mapToDouble(e -> e.getElementAt(1)).toArray());
         new SwingWrapper(chart6).displayChart();
     }
 }
