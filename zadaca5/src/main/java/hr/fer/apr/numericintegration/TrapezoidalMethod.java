@@ -11,8 +11,15 @@ import static hr.fer.apr.lu.matrix.Vector.addition;
 import static hr.fer.apr.numericintegration.MethodHelper.getRt;
 
 public class TrapezoidalMethod implements ImplicitMethod {
+    private final MethodHelper methodHelper;
+    private double[] x1;
+    private double[] x2;
     private Matrix R;
     private Matrix S;
+
+    public TrapezoidalMethod(MethodHelper methodHelper) {
+        this.methodHelper = methodHelper;
+    }
 
     @Override
     public void transformToExplicit(Matrix A, Matrix B, double T) {
@@ -24,19 +31,40 @@ public class TrapezoidalMethod implements ImplicitMethod {
             U.setElementAt(i, i, 1);
         }
 
-        SquareMatrix expression = (SquareMatrix) subtraction(U, A.multiplicationWithScalar(T / 2));
+        SquareMatrix expression = new SquareMatrix(subtraction(U, A.multiplicationWithScalar(T / 2)));
         this.R = matrixMultiplication(inverseOfMatrix(expression), addition(U, A.multiplicationWithScalar(T / 2)));
         this.S = matrixMultiplication(inverseOfMatrix(expression).multiplicationWithScalar(T / 2), B);
     }
 
     @Override
-    public Vector apply(Vector x0, String[] rt, double T, double tMax) {
+    public Vector apply(Vector x0, String[] rt, double T, double tMax, int numberOfPrintingIteration, boolean calculateError) {
         Vector x = new Vector(x0);
+        int iterationNumber = 1;
+        x1 = new double[(int) (tMax/T)+1];
+        x2 = new double[(int) (tMax/T)+1];
 
         for (double i = T; i <= tMax; i = i + T) {
             x = addition(new Vector(matrixMultiplication(R, x)), new Vector(matrixMultiplication(S, addition(getRt(rt, i - T), getRt(rt, i)))));
+            if(numberOfPrintingIteration != 0 && iterationNumber++ % numberOfPrintingIteration == 0) {
+                methodHelper.getStringBuilder().append(x).append(System.lineSeparator());
+                x1[iterationNumber-1] = x.getElementAt(0);
+                x2[iterationNumber-1] = x.getElementAt(1);
+            }
+            if (calculateError) methodHelper.calculateError(x, i);
         }
 
         return x;
+    }
+
+    public MethodHelper getMethodHelper() {
+        return methodHelper;
+    }
+
+    public double[] getX1() {
+        return x1;
+    }
+
+    public double[] getX2() {
+        return x2;
     }
 }

@@ -7,6 +7,8 @@ public interface ImplicitMethod {
 
     void transformToExplicit(Matrix A, Matrix B, double T);
 
-    Vector apply(Vector x0, String[] rt, double T, double tMax);
+    Vector apply(Vector x0, String[] rt, double T, double tMax, int numberOfPrintingIteration, boolean calculateError);
+
+    MethodHelper getMethodHelper();
 
 }

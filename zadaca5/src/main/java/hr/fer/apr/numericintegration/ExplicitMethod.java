@@ -5,5 +5,8 @@ import hr.fer.apr.lu.matrix.Vector;
 
 public interface ExplicitMethod {
 
-    Vector apply(Matrix A, Vector x0, Matrix B, String[] rt, double T, double tMax);
+    Vector apply(Matrix A, Vector x0, Matrix B, String[] rt, double T, double tMax, int numberOfPrintingIteration, boolean calculateError);
+
+    MethodHelper getMethodHelper();
+
 }
